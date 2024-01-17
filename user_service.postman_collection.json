@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "23eb8e84-ac95-4e85-87ca-ad93147c86f0",
+		"name": "User service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "9908193"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userName\": \"test\",\r\n  \"birthdate\": \"1995-06-06\",\r\n  \"countryOfResidence\": \"France\",\r\n  \"phoneNumber\": \"33123456789\",\r\n  \"gender\": \"FEMALE\"\r\n}\r\n"
+				},
+				"url": "{{BASE_URL}}/user"
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/user/:id",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"user",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
