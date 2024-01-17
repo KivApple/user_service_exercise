@@ -4,6 +4,7 @@ import com.eternal_search.user_service_exercise.model.enumeration.Gender;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 
 import java.time.LocalDate;
 
@@ -15,6 +16,7 @@ import java.time.LocalDate;
  * @param phoneNumber Le numéro de téléphone
  * @param gender Le sexe
  */
+@Builder
 public record UserCreateDTO(
 		@NotBlank
 		String userName,
