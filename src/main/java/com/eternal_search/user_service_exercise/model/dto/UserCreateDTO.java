@@ -3,6 +3,7 @@ package com.eternal_search.user_service_exercise.model.dto;
 import com.eternal_search.user_service_exercise.model.enumeration.Gender;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
@@ -24,6 +25,7 @@ public record UserCreateDTO(
 		@NotBlank
 		String countryOfResidence,
 		
+		@Pattern(regexp = "[0-9]{7,15}")
 		String phoneNumber,
 		
 		Gender gender
