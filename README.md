@@ -7,8 +7,6 @@ A simple service with two endpoints:
 - `POST /user` - create a user. Accepts user info and returns created user info
 - `GET /user/{id}` - fetch info about a registered user (or error 404 if there is no user with such id)
 
-You can find examples of requests in [Postman collection](user_service.postman_collection.json).
-
 User registration request body example:
 
     {
@@ -44,6 +42,20 @@ Also service allows creation only of adult (18+) users residing in France
 Project uses embedded in-memory H2 database, so it can be easily launched without any prior configuration.
 
 Project has several unit tests and integration tests.
+
+## Running project
+
+Project uses Gradle build system. Useful commands:
+
+- `./gradlew bootRun` Build and run project
+- `./gradlew test` Build and run tests
+- `./gradlew bootJar` Build project JAR with all dependencies
+
+Project is running on http://localhost:8080 by default.
+
+You can access OpenAPI documentation and Swagger UI: http://localhost:8080/swagger-ui/index.html
+
+You can find examples of requests in [Postman collection](user_service.postman_collection.json).
 
 ## Project structure
 
