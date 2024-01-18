@@ -1,5 +1,6 @@
 package com.eternal_search.user_service_exercise.controller;
 
+import com.eternal_search.user_service_exercise.config.LoggingCall;
 import com.eternal_search.user_service_exercise.exception.UserNotEligibleException;
 import com.eternal_search.user_service_exercise.exception.UserNotFoundException;
 import com.eternal_search.user_service_exercise.model.dto.UserCreateDTO;
@@ -23,6 +24,7 @@ public class UserController {
 	 * @return Informations sur l'utilisateur créé
 	 */
 	@PostMapping
+	@LoggingCall
 	public UserInfoDTO create(@RequestBody @Valid UserCreateDTO dto) {
 		if (!userService.isEligible(dto)) {
 			throw new UserNotEligibleException();
@@ -36,6 +38,7 @@ public class UserController {
 	 * @throws UserNotFoundException si l'utilisateur est introuvable
 	 */
 	@GetMapping("/{id}")
+	@LoggingCall
 	public UserInfoDTO findById(@PathVariable long id) {
 		return userService.findById(id)
 				.orElseThrow(() -> new UserNotFoundException(id));
