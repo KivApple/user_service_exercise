@@ -1,11 +1,13 @@
 package com.eternal_search.user_service_exercise.service;
 
+import com.eternal_search.user_service_exercise.exception.UserNameExistsException;
 import com.eternal_search.user_service_exercise.model.dto.UserCreateDTO;
 import com.eternal_search.user_service_exercise.model.dto.UserInfoDTO;
 import com.eternal_search.user_service_exercise.model.entity.User;
 import com.eternal_search.user_service_exercise.model.mapper.UserMapper;
 import com.eternal_search.user_service_exercise.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,7 +47,11 @@ public class UserService {
 	 */
 	public UserInfoDTO create(UserCreateDTO dto) {
 		User user = userMapper.toEntity(dto);
-		user = userRepository.save(user);
+		try {
+			user = userRepository.save(user);
+		} catch (DataIntegrityViolationException e) {
+			throw new UserNameExistsException();
+		}
 		return userMapper.toDto(user);
 	}
 	
