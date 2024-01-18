@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
@@ -32,7 +33,7 @@ class UserServiceExerciseIntegrationTests {
 	void createEligibleUser() throws Exception {
 		// Créer une demande
 		UserCreateDTO request = UserCreateDTO.builder()
-				.userName("test")
+				.userName(UUID.randomUUID().toString()) // Éliminez les conflits si la base de données n'est pas vide
 				.birthdate(LocalDate.now().minusYears(18))
 				.countryOfResidence("France")
 				.phoneNumber("33123456789")
@@ -64,7 +65,7 @@ class UserServiceExerciseIntegrationTests {
 	void createAndFetchUser() throws Exception {
 		// Créer une demande
 		UserCreateDTO request = UserCreateDTO.builder()
-				.userName("test")
+				.userName(UUID.randomUUID().toString()) // Éliminez les conflits si la base de données n'est pas vide
 				.birthdate(LocalDate.now().minusYears(18))
 				.countryOfResidence("France")
 				.phoneNumber("33123456789")
@@ -112,7 +113,7 @@ class UserServiceExerciseIntegrationTests {
 	@Test
 	void createNonEligibleUser() throws Exception {
 		UserCreateDTO request = UserCreateDTO.builder()
-				.userName("test")
+				.userName(UUID.randomUUID().toString()) // Éliminez les conflits si la base de données n'est pas vide
 				.birthdate(LocalDate.now().minusYears(18).plusDays(1))
 				.countryOfResidence("Italy")
 				.build();
@@ -130,7 +131,7 @@ class UserServiceExerciseIntegrationTests {
 	@Test
 	void createUserWithInvalidPhoneNumber() throws Exception {
 		UserCreateDTO request = UserCreateDTO.builder()
-				.userName("test")
+				.userName(UUID.randomUUID().toString()) // Éliminez les conflits si la base de données n'est pas vide
 				.birthdate(LocalDate.now().minusYears(18))
 				.countryOfResidence("France")
 				.phoneNumber("INVALID")
@@ -140,5 +141,34 @@ class UserServiceExerciseIntegrationTests {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(request))
 		).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
+	
+	/**
+	 * Essayer de créer deux utilisateurs avec le même nom
+	 */
+	@Test
+	void createUserWithConflict() throws Exception {
+		// Création du premier utilisateur (avec succès)
+		UserCreateDTO request1 = UserCreateDTO.builder()
+				.userName(UUID.randomUUID().toString()) // Éliminez les conflits si la base de données n'est pas vide
+				.birthdate(LocalDate.now().minusYears(18))
+				.countryOfResidence("France")
+				.build();
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/user")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request1))
+		).andExpect(MockMvcResultMatchers.status().isOk());
+		// Créer un deuxième utilisateur avec le même nom (conflit)
+		UserCreateDTO request2 = UserCreateDTO.builder()
+				.userName(request1.userName())
+				.birthdate(request1.birthdate())
+				.countryOfResidence(request1.countryOfResidence())
+				.build();
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/user")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request2))
+		).andExpect(MockMvcResultMatchers.status().isConflict());
 	}
 }

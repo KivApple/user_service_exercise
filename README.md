@@ -34,6 +34,7 @@ There is some validation for input data (HTTP error 400 returned if validation w
 
 - `userName`, `birthdate` and `countryOfResidence` are required fields
 - `userName` and `countryOfResidence` cannot be blank
+- `userName` must be unique (if you attempt to register same-named user the second time you'll receive HTTP error 409)
 - `phoneNumber` validated against regex
 - `gender` must be either `MALE`, `FEMALE` or `OTHER`
 
